@@ -230,6 +230,7 @@ __pycache__/
 .venv/
 
 # generated audio must not be committed
+output/
 *.wav
 *.flac
 *.mp3

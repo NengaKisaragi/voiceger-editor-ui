@@ -67,8 +67,15 @@ def settings():
     return load_settings()
 
 
+# 保存先は、このUIのフォルダ直下の output/（--output-dir か VOICEGER_UI_OUTPUT_DIR で変更可）。
+# 形式（wav/flac/mp3）やファイル名テンプレートは Voiceger Editor の設定に従う。
+OUTPUT_DIR = Path(
+    os.environ.get("VOICEGER_UI_OUTPUT_DIR") or HERE / "output"
+).expanduser().resolve()
+
+
 def output_dir() -> Path:
-    return Path(settings().output_dir)
+    return OUTPUT_DIR
 
 
 # ---------------------------------------------------------------- info
@@ -88,7 +95,7 @@ def info():
             "top_k": s.top_k,
             "top_p": s.top_p,
         },
-        "output_dir": str(s.output_dir),
+        "output_dir": str(output_dir()),
         "output_format": s.output_format,
     }
 
@@ -221,7 +228,7 @@ def save(body: SaveIn):
         wav_source=t["path"],
         source_text=(body.caption or t["text"]).strip(),
         style_name=t["style"],
-        output_dir=Path(s.output_dir),
+        output_dir=output_dir(),
         output_format=s.output_format,
         output_encoding=enc,
         save_text=s.save_text,
@@ -296,10 +303,20 @@ def main() -> None:
     parser.add_argument("--host", default=os.environ.get("VOICEGER_UI_HOST", "127.0.0.1"))
     parser.add_argument("--port", type=int, default=int(os.environ.get("VOICEGER_UI_PORT", "8610")))
     parser.add_argument("--no-browser", action="store_true", help="do not open a browser")
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        help="folder for saved audio (default: ./output next to server.py)",
+    )
     args = parser.parse_args()
+
+    if args.output_dir is not None:
+        global OUTPUT_DIR
+        OUTPUT_DIR = args.output_dir.expanduser().resolve()
 
     url = f"http://{'127.0.0.1' if args.host in ('0.0.0.0', '::') else args.host}:{args.port}"
     print(f"voiceger-editor-UI: {url}  (Ctrl+C で終了)", flush=True)
+    print(f"保存先: {OUTPUT_DIR}", flush=True)
     if not args.no_browser:
         threading.Timer(1.5, webbrowser.open, args=(url,)).start()
     uvicorn.run(app, host=args.host, port=args.port)
