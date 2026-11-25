@@ -221,3 +221,22 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---- voiceger-editor-ui ----
+# logs / runtime
+*.log
+__pycache__/
+*.pyc
+.venv/
+
+# generated audio must not be committed
+*.wav
+*.flac
+*.mp3
+*.lab
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
