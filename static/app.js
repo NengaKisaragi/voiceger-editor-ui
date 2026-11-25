@@ -59,7 +59,7 @@ function startFlipbook() {
 async function loadFrames() {
   const names = await api("/ui/frames");
   mascot.frames = names.map((n) => { const im = new Image(); im.src = "/frames/" + encodeURIComponent(n); return im; });
-  if (mascot.frames.length) $("mascotImg").src = mascot.frames[0].src;
+  if (mascot.frames.length) $("mascotImg").src = $("favicon").href = mascot.frames[0].src;
   $("frameInfo").textContent = `${names.length} コマ（frames/ フォルダ）`;
   startFlipbook();
 }
