@@ -227,7 +227,8 @@ def save(body: SaveIn):
         save_text=s.save_text,
         filename_template=s.filename_template,
     )
-    return {"file": saved.wav_path.name}
+    path = saved.wav_path.resolve()
+    return {"file": path.name, "path": str(path)}
 
 
 # ---------------------------------------------------------------- outputs

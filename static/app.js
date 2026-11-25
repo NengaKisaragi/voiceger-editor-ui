@@ -26,12 +26,12 @@ async function api(path, opts = {}) {
   return res.json();
 }
 let toastTimer;
-function toast(msg, err = false) {
+function toast(msg, err = false, ms = 0) {
   const t = $("toast");
   t.textContent = msg;
   t.className = "toast show" + (err ? " err" : "");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => (t.className = "toast" + (err ? " err" : "")), err ? 5000 : 2200);
+  toastTimer = setTimeout(() => (t.className = "toast" + (err ? " err" : "")), ms || (err ? 5000 : 2200));
 }
 function bindRange(id, fmt) {
   const el = $(id), out = $(id + "V");
@@ -97,7 +97,7 @@ function renderTakes() {
     const meta = t.status === "ok" ? `Take ${t.no}　${t.style} | ${t.speed.toFixed(2)}x | ${t.duration.toFixed(2)}s`
       : t.status === "pending" ? `Take ${t.no}　生成中…` : `Take ${t.no}　失敗: ${t.error}`;
     li.innerHTML = `<span class="no">${t.no}</span><span class="meta"></span>
-      <span class="saved">${t.saved ? "✓ 保存済" : ""}</span><span></span>`;
+      <span class="saved" title="${t.savedPath ? t.savedPath.replace(/"/g, "&quot;") : ""}">${t.saved ? "✓ 保存済" : ""}</span><span></span>`;
     li.querySelector(".meta").textContent = meta;
     li.querySelector(".meta").title = meta;
     if (t.status === "ok") {
@@ -130,8 +130,8 @@ async function saveTake(idx) {
   if (!t || t.status !== "ok") return;
   try {
     const r = await api("/ui/save", { method: "POST", body: { id: t.id, caption: t.text } });
-    t.saved = true; renderTakes();
-    toast("保存したのだ: " + r.file);
+    t.saved = true; t.savedPath = r.path; renderTakes();
+    toast("保存したのだ:\n" + r.path, false, 6000);
     loadOutputs();
   } catch (e) { toast("保存失敗: " + e.message, true); }
 }
