@@ -28,6 +28,10 @@
 | [Voiceger (voiceger_v2)](https://github.com/zunzun999/voiceger_v2) | 公式の手順でインストール。Python 3.9 の仮想環境（`.venv`）を作っておく |
 | [Voiceger Editor](https://github.com/sayosomi/voiceger-editor) **0.1.1** | Voicegerの仮想環境に `api` 付きでインストール |
 
+> [!NOTE]
+> **Voiceger と Voiceger Editor はこのリポジトリに含まれていません。** それぞれ公式の手順で各自インストールしてください。
+> このUIは起動時に、Voicegerの仮想環境にインストール済みの Voiceger Editor を読み込んで使います。
+
 動作確認は **Linux（Ubuntu / CUDA）+ Voiceger Editor 0.1.1** でのみ行っています。
 Windows / macOS 用の起動ファイルも用意していますが、実機での確認はしていません。
 macOS では CUDA が使えないため、合成は遅くなります（Voiceger側の制約です）。
@@ -75,11 +79,14 @@ voiceger-editor --accept-voiceger-terms
 どこに置いても構いません。Voicegerと同じ階層に置くと、自動でVoicegerを見つけます。
 
 ```
-voiceger_v2/            ← Voiceger
-voiceger-editor-ui/     ← このリポジトリ
+voiceger_v2/              ← Voiceger（各自インストール）
+  └ .venv/                   └ ここに Voiceger Editor を pip でインストール（手順2）
+voiceger-editor-ui/       ← このリポジトリ（UIのコードのみ）
 ```
 
 別の場所にある場合は、環境変数 `VOICEGER_ROOT` でVoicegerのフォルダを指定してください（未指定の場合は `../voiceger_v2` → `~/voiceger_v2` の順に探します）。
+
+設定・ユーザー辞書・規約同意の記録は、Voiceger Editor の標準の保存場所（Linux：`~/.config/voiceger-editor/`、macOS：`~/Library/Application Support/voiceger-editor/`、Windows：ユーザーの AppData 内）がそのまま使われます。TUI版と共通なので、このUI用に別のフォルダを用意する必要はありません。
 
 ## 起動
 
