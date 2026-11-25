@@ -17,7 +17,7 @@
 > - Voiceger Editor の注意事項は [Voiceger Editor の README](https://github.com/sayosomi/voiceger-editor) と THIRD_PARTY_NOTICES.md を参照してください。
 > - **このUIのライセンス（MIT）は，このリポジトリのコードにのみ適用されます。** 生成音声，Voiceger，モデル，参照音声，キャラクター・名称・商標など，第三者の権利について何の許諾も与えるものではありません。
 > - このUIは非公式のものです。Voiceger・Voiceger Editor・東北ずん子・ずんだもんプロジェクトの公式とは関係ありません。
-> - 規約への同意はこのUIからは行いません。初回は公式の手順（下記）で規約を確認し，同意してください。
+> - 規約への同意が自動で行われることはありません。初回セットアップ（下記）で，規約を読んだうえで **あなた自身が `agree` と入力した場合のみ** 同意が記録されます。
 
 ---
 
@@ -38,7 +38,34 @@ macOS では CUDA が使えないため，合成は遅くなります（Voiceger
 
 > このUIは Voiceger Editor の内部モジュールを直接呼び出しています。Voiceger Editor のバージョンが変わると動かなくなることがあります。
 
-## セットアップ
+## かんたんスタート
+
+Voiceger のインストールが済んでいれば，あとはダブルクリックだけです。
+
+| | 初回セットアップ（1回だけ） | 起動 |
+| --- | --- | --- |
+| **Windows** | `setup.bat` をダブルクリック | `start-ui.bat` をダブルクリック |
+| **macOS** | `setup.command` をダブルクリック※ | `start-ui.command` をダブルクリック※ |
+| **Linux** | `./setup.sh` | `./start-ui.sh` |
+
+※ macOS で初めて開くときに「開発元を確認できません」と出た場合は，ファイルを右クリック →「開く」で実行できます。実行権限がないと言われたら，ターミナルで `chmod +x setup.command start-ui.command setup.sh start-ui.sh` を一度実行してください。
+
+初回セットアップでは，次のことを自動で行います。
+
+1. Voiceger Editor 0.1.1 のインストール（Voiceger の仮想環境へ）
+2. 環境チェック
+3. 利用規約の案内（規約を読んだうえで `agree` と入力した場合のみ同意を記録）
+
+セットアップが終わったら，起動のファイルをダブルクリックすると，ブラウザでUIが開きます。
+Voiceger が見つからないと言われた場合は，下の「4. このリポジトリを置く」を確認してください。
+
+> macOS / Windows 用のスクリプトは，作者が実機で試せていません（Linux のみ確認済み）。動かなかったら Issue で教えてください。
+
+---
+
+## 手動でセットアップする場合
+
+上のスクリプトを使わず，手でやる場合の手順です。
 
 ### 1. Voiceger をインストール
 
@@ -90,15 +117,13 @@ voiceger-editor-ui/       ← このリポジトリ（UIのコードのみ）
 
 ## 起動
 
-macOS / Linux：
+| OS | 方法 |
+| --- | --- |
+| Windows | `start-ui.bat` をダブルクリック |
+| macOS | `start-ui.command` をダブルクリック（またはターミナルで `./start-ui.sh`） |
+| Linux | ターミナルで `./start-ui.sh` |
 
-```bash
-./start-ui.sh
-```
-
-Windows：`start-ui.bat` をダブルクリック（またはコマンドプロンプトから実行）
-
-ブラウザで http://127.0.0.1:8610 が開きます。終了はターミナルで `Ctrl+C`。
+ブラウザで http://127.0.0.1:8610 が開きます。終了は，開いた黒い画面（ターミナル）を閉じるか `Ctrl+C`。
 
 | オプション | 内容 |
 | --- | --- |
@@ -136,8 +161,9 @@ frames/03.png ...
 server.py        FastAPI サーバー（Voiceger Editor を import して合成）
 static/          画面（HTML / CSS / JS，ビルド不要）
 frames/          パラパラ漫画のコマ画像
-start-ui.sh      macOS / Linux 用起動スクリプト
-start-ui.bat     Windows 用起動スクリプト
+start-ui.sh / .command  macOS / Linux 用の起動（.command は macOS のダブルクリック用）
+start-ui.bat     Windows 用の起動
+setup.*          初回セットアップ（setup.py を各OS用に呼び出す）
 ```
 
 Voiceger Editor の VOICEVOX互換API も `http://127.0.0.1:8610/engine/` 以下でそのまま使えます。
